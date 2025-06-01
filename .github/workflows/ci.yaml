@@ -1,0 +1,30 @@
+name: wf-ci
+on:
+  push:
+    branches:
+      - develop
+  pull_request:
+    branches:
+      - develop
+    types:
+      - opened
+      - synchronize
+jobs:
+  linting-job:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout Repository From GitHub
+        uses: actions/checkout@v4
+      - name: Repository Info (For Testing Purpose)
+        run: |
+          git log --oneline
+          git branch
+          echo "Event Name: ${{github.event_name}}"
+          echo "Head Ref: ${{github.head_ref}}"
+          echo "Repo Name: ${{github.repository}}"
+          echo "Actor Name: ${{github.actor}}"
+      - name: Lint HTML
+        run: npx htmlhint "**/*.html"
+      - name: Lint CSS
+        run: npx stylelint "**/*.css"
+        
